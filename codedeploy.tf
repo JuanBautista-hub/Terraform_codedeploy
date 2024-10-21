@@ -13,10 +13,7 @@ resource "aws_s3_object" "app_object" {
 resource "aws_codedeploy_app" "app" {
   name             = var.name_codedeploy_application
   compute_platform = var.compute_platform_name
-  tags = {
-    key   = "Enviroment"
-    value = "dev"
-  }
+
 }
 
 resource "aws_codedeploy_deployment_group" "deployment_group" {
@@ -26,6 +23,9 @@ resource "aws_codedeploy_deployment_group" "deployment_group" {
   deployment_style {
     deployment_type = var.deployment_type
 
+  }
+  tags = {
+    Enviroment = "dev"
   }
 }
 
