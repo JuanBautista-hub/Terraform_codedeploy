@@ -1,5 +1,7 @@
 # Create bucket s3 with name random asigned
 
+## Create a bucket, upload  the bucket file.zip , create a user group, create a application codedeploy and  asign tags.
+
 1.-create variable file `archivo.tfvars`
 
 ```

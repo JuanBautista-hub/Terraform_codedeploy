@@ -33,3 +33,6 @@ variable "deployment_group_name_codedeploy" {
 variable "deployment_type" {
   
 }
+variable "codedeploy_role_name" {
+  
+}
