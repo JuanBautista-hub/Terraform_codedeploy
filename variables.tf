@@ -36,3 +36,7 @@ variable "deployment_type" {
 variable "codedeploy_role_name" {
   
 }
+
+variable "Environment" {
+  
+}

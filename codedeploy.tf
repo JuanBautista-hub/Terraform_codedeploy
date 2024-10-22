@@ -25,15 +25,29 @@ resource "aws_codedeploy_deployment_group" "deployment_group" {
 
   }
   tags = {
-    Enviroment = "dev"
+    Environment = var.Environment
   }
+  on_premises_instance_tag_filter {
+    key   = "Environment"
+    value = var.Environment
+    type  = "KEY_AND_VALUE"
+
+  }
+
+  auto_rollback_configuration {
+    enabled = true
+    events  = ["DEPLOYMENT_FAILURE"]
+  }
+
+  outdated_instances_strategy = "UPDATE"
 }
+
 
 resource "aws_iam_role" "codedeploy_role" {
   name               = var.codedeploy_role_name
   assume_role_policy = data.aws_iam_policy_document.codedeploy_assume_policy.json
   tags = {
-    Environment = "dev"
+    Environment = var.Environment
     Project     = "MyApp"
   }
 }
@@ -54,3 +68,12 @@ resource "aws_iam_role_policy_attachment" "codedeploy_policy" {
 }
 
 
+resource "null_resource" "create_deployment" {
+  provisioner "local-exec" {
+    command = <<EOT
+      aws deploy create-deployment --application-name ${var.name_codedeploy_application} --deployment-group-name ${var.deployment_group_name_codedeploy} --s3-location bucket=${var.bucket_name},key=${var.key_object_zip},bundleType=zip --region ${var.region_aws}
+    EOT
+  }
+
+  depends_on = [aws_codedeploy_deployment_group.deployment_group] # Asegúrate de que tu grupo de implementación ya exista
+}
